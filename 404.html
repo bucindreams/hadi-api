@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v6.0.0-beta1/css/all.css" type="text/css" media="all" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=0">
+	<title>404 not found</title>
+	<script src="https://hadi-api.github.io/assets/js/function.js" type="text/javascript" charset="utf-8"></script>
+	<link href="https://hadi-api.github.io/assets/font/digital/index.css" rel="stylesheet" type="text/css"/>
+	<style type="text/css" media="all">
+	@import: url('https://hadi-api.github.io/assets/font/digital/index.css');
+		body {
+			background: #0E102F;
+			font-family: normal;
+		}
+		div#card {
+			color: #64FB00;
+			text-align: left;
+			padding: 1.2rem;
+			background: #1A1D43;
+			margin: 1.5rem auto;
+			width: 18rem;
+			min-height: 10rem;
+			border-radius: 3px;
+			box-shadow: 3px 2px 13px black;
+		}
+		div#card > img {
+			max-width: 20rem;
+			max-height: 20rem;
+		}
+
+		video {
+			max-width: 18rem;
+			max-height: 18rem;
+			margin: 10px 0 0 0;
+			border: 1px solid black;
+		}
+		tab {
+			padding: 0 1rem 0 0;
+		}
+		a {
+			text-decoration: none;
+			color: #69FAFA;
+		}
+		a:hover {
+			color: blue;
+		}
+		div#control {
+			text-align: center;
+		}
+		.skip {
+			background: none;
+			color: white;
+			border: 0px;
+			font-size: 1.8rem;
+		}
+		.skip:hover {
+			color: black;
+		}
+		div#content {
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<div id="content">
+		<div id="card">
+			<span id="run1"></span><span id="run1tik">|</span>
+		</div>
+		<div id="card">
+			<span id="time" style="font-family: 'SF Digital Readout Medium Oblique'">00:00:00</span><span id="run2"></span><span id="run2tik">|</span><br>
+			<a id="source" href="javascript:void(0)" alt="null.mp4"><video></video></a><br>
+			<div id="control">
+				<span id="title"></span><br>
+				<button id="skip" class="skip fal fa-angle-double-left"></button>
+				<button id="pauseplay"></button><button id="skip2" class="skip fal fa-angle-double-right"></button>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" charset="utf-8">
+	if(/x11|win64|intel|windows/i.test(navigator.userAgent.toLowerCase())) {
+		a.querySelector('body').style.background = "white";
+		a.querySelector('body').innerHTML = "<p style='color: black;font-size: 2rem'>{<br><tab></tab>creator: 'muhammad hadi firmansya',<br><tab></tab>status: 404,<br><tab></tab>msg: '[!] 404 not found<br>template html tidak tersedia pada perangkat anda'<br>}</p>";
+		
+	} else{
+		function duo(s){
+			return (s<10) ? '0'+s : s
+		}
+		time = a.querySelector('span#time')
+		setInterval(()=>{
+			teks_time = ""
+			detik = new Date().getSeconds();
+			menit = new Date().getMinutes();
+			jam = new Date().getHours();
+			teks_time += `${duo(jam)}:${duo(menit)}:${duo(detik)}`
+			time.innerHTML = teks_time
+		})
+		video = a.querySelector('video')
+		source = a.querySelector('a#source')
+		list = ["https://youtu.be/Ngq0omaP8Xg","https://youtu.be/Ew7I1C75rVw","https://youtu.be/KrT9pd6bVR4"];
+		random = list[Math.floor(Math.random() * list.length)]
+		fetch("https://hadi-api.herokuapp.com/api/yt2/video?url="+random).then(res=>res.json()).then(res=> {
+			video.setAttribute("src", res.result.download_video || "Null");
+			video.setAttribute("poster",res.result.thumb)
+			source.setAttribute('href',random)
+			source.setAttribute('alt',`${res.result.title.replace(/ /g,"_")}.mp4`)
+			jalan(false, 'title', res.result.title, 90)
+			video.autoplay = false
+		})
+
+		pauseorplay = a.querySelector('button#pauseplay')
+		if (video.paused) {
+			pauseorplay.setAttribute('class', 'skip fal fa-play-circle')
+		}else {
+			pauseorplay.setAttribute('class', 'skip fal fa-pause-circle')
+		}
+		video.onended = function () {
+			pauseorplay.setAttribute('class', 'skip fal fa-play-circle')
+		}
+		video.onpause = function () {
+			pauseorplay.setAttribute('class', 'skip fal fa-play-circle')
+		}
+		video.onplay = function () {
+			pauseorplay.setAttribute('class', 'skip fal fa-pause-circle')
+		}
+		pauseorplay.onclick = async function () {
+			if (video.paused) {
+				pauseorplay.setAttribute('style', 'color: black')
+				await video.play()
+				pauseorplay.setAttribute('style', 'color: white')
+			} else {
+				pauseorplay.setAttribute('style', 'color: black')
+				await video.pause()
+				pauseorplay.setAttribute('style', 'color: white')
+			}
+		}
+
+		skp1 = a.querySelector('button#skip2')
+		skp1.onclick = function () {
+			video.currentTime += 10
+			setTimeout(()=> {
+				skp1.setAttribute('style', 'color: white')
+			}, 400)
+		}
+		skp2 = a.querySelector('button#skip')
+		skp2.onclick = function () {
+			video.currentTime -= 10
+			if (video.currentTime < 0) video.currentTime = 0
+			setTimeout(()=> {
+				skp2.setAttribute('style', 'color: white')
+			}, 400)
+		}
+
+		jalan(true, 'run1',
+			`{[<br><tab></tab>]creator: 'muhammad hadi firmansya',[<br><tab></tab>]	status: 404,[<br><tab></tab>]	msg: '[[!]] 404 not found'[<br>]}`, 70, 100)
+		jalan(true, 'run2', `[<tab></tab>]silahkan kembali ke dokumentasi api click [<a href='https://hadi-api.herokuapp.com/api'>here</a>]`, 50)
+	}
+	</script>
+</body>
+</html>
+<!-- new update -->
